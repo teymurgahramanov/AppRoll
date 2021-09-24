@@ -4,7 +4,7 @@ workflow:
 
 stages:
   - deploy
-  - test
+  - check
   - cleanup
     
 deploy:
@@ -17,8 +17,8 @@ deploy:
         done
       done
 
-test:
-  stage: test
+check:
+  stage: check
   script:
     - python3 -m venv venv
     - source venv/bin/activate
@@ -27,11 +27,7 @@ test:
     - touch healthcheck.log
     - for n in $APP_NAME; do
         for c in $APP_LOC; do
-          if [[ "$c" == "$MAIN_SITE" ]]; then
-            python3 healthcheck.py $n $APP_ENV $c | tee -a healthcheck.log;
-          else
-            echo "Test disabled for $c";
-          fi
+          python3 healthcheck.py $n $APP_ENV $c | tee -a healthcheck.log;
         done
       done
     - if [[ $(cat healthcheck.log | egrep 'FAIL|WARNING' | wc -l) -gt 0 ]]; then exit 1; fi
