@@ -39,11 +39,11 @@ Run:\
 * No ability to use package management solutions, so developers upload application packages to web server.
 
 ### Management of application infrastructure separated to 3 layers:
-![toplogy](./.static/toplogy.png)
+![toplogy](./.static/topology.png)
 
 ### 1. Server Provisioning
-Deploy, tuning, security and other server related tasks performed by Ansible
+Deploy, tuning, security and other server related tasks performed by Ansible.
 ### 2. Application state control
 Control ***how*** (App version, Java runtime version, Properties and etc.) and ***where*** (Target servers, Environments and Sites) Application will run. Everything stored in GitLab and managed through Pipelines and Ansible.
 ### 3. Application instance control
-Control instance ***status*** (start,stop,restart) and perform ***healthchecks*** (systemd service or application endpoint). Here used [AppHook](https://github.com/teymurgahramanov/AppHook)
+Control instance ***status*** (start,stop,restart) and perform ***healthchecks*** (systemd service or application endpoint). Here used [AppHook](https://github.com/teymurgahramanov/AppHook).
