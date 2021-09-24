@@ -1,0 +1,16 @@
+[Unit]
+Description={{ lookup('vars',app_name)['description'] }}
+
+[Service]
+Type=forking
+SuccessExitStatus=143
+User={{ lookup('vars','permissions')[app_env]['owner_user'] }}
+Group={{ lookup('vars','permissions')[app_env]['owner_group'] }}
+ExecStart=/bin/bash {{ structure.app.root }}/control.sh start
+ExecStop=/bin/bash {{ structure.app.root }}/control.sh stop
+RestartSec=30
+Restart=on-failure
+LimitNOFILE=100000
+
+[Install]
+WantedBy=multi-user.target

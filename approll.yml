@@ -1,0 +1,31 @@
+---
+
+- name: AppRoll
+  hosts: app
+  any_errors_fatal: true
+  gather_facts: no
+  ignore_errors: yes
+
+  tasks:
+
+    - name: Include 
+      include_vars: "{{ item }}"
+      with_items:
+        - "./approll/vars/main/{{ app_name }}.yml"
+      tags:
+        - always
+
+    - name: Add host
+      add_host:
+        name: "{{ item }}"
+        groups: app_targets
+      with_items:  
+         - "{{ lookup('vars',app_name)['targets'][app_env][app_loc] }}"       
+      tags:
+        - always
+
+- hosts: app_targets
+  become: yes
+  gather_facts: yes
+  roles:
+    - { role: './approll' }

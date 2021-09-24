@@ -1,0 +1,142 @@
+---
+
+- name: Create common structure
+  file:
+    path: "{{ item }}"
+    state: directory
+    recurse: yes
+    owner: "{{ lookup('vars','permissions')[app_env]['owner_user'] }}"
+    group: "{{ lookup('vars','permissions')[app_env]['owner_group'] }}"
+    mode: "0770"
+  with_items:
+    - "{{ structure.app.self }}"
+    - "{{ structure.app.root }}"
+    - "{{ structure.app.type }}"
+    - "{{ structure.log.self }}"
+    - "{{ structure.log.app }}"
+  tags:
+    - deploy
+
+- name: Create or update systemd service
+  template:
+    src: "{{ lookup('vars',app_name)['type'] }}/systemd.service.j2"
+    dest: "/etc/systemd/system/{{ app_name }}.service"
+  notify:
+    - Restart service
+  tags:
+    - deploy
+
+- name: Check if app has its own control.sh
+  stat:
+    path: "{{ role_path }}/templates/{{ app_name }}/control.sh.j2"
+  register: control_script
+  delegate_to: localhost
+  tags:
+    - deploy
+
+- name: Copy control.sh
+  template:
+    src: "{{ lookup('vars',app_name)['type'] }}/control.sh.j2"
+    dest: "{{ structure.app.root }}/control.sh"
+    owner: "{{ lookup('vars','permissions')[app_env]['owner_user'] }}"
+    group: "{{ lookup('vars','permissions')[app_env]['owner_group'] }}"
+    mode: "0660"
+    validate: bash -n %s
+  notify:
+    - Restart service
+  when: not control_script.stat.exists
+  tags:
+    - deploy
+
+- name: Update app version
+  get_url: 
+    url: "{{ lookup('vars',app_name)['state'][app_env]['version'] }}"
+    dest: "{{ structure.app.type }}/{{ app_name }}.{{ lookup('vars',app_name)['type']}}"
+    owner: "{{ lookup('vars','permissions')[app_env]['owner_user'] }}"
+    group: "{{ lookup('vars','permissions')[app_env]['owner_group'] }}"
+    mode: "0660"
+    force: yes
+  notify:
+    - Restart service
+  tags:
+    - deploy
+     
+
+- name: Find directories
+  find:
+    paths: "{{ role_path }}/templates/{{ app_name }}"
+    recurse: yes
+    file_type: directory
+  delegate_to: localhost
+  become: no
+  register: find_directory_result
+  tags:
+    - deploy
+     
+
+- name: Find templates
+  find:
+    paths: "{{ role_path }}/templates/{{ app_name }}"
+    recurse: yes
+    patterns: '*.j2'
+    file_type: file
+  delegate_to: localhost
+  become: no
+  register: find_template_result
+  tags:
+    - deploy
+     
+- name: Find other files
+  find:
+    paths: "{{ role_path }}/templates/{{ app_name }}"
+    recurse: yes
+    excludes: '*.j2'
+    file_type: file
+  delegate_to: localhost
+  become: no
+  register: find_other_result
+  tags:
+    - deploy
+     
+- name: Create the directories
+  file:
+    path: "{{ structure.app.root }}{{ item.path | regex_replace(role_path + '/templates/' + app_name,'') }}"
+    state: directory
+    recurse: yes
+    owner: "{{ lookup('vars','permissions')[app_env]['owner_user'] }}"
+    group: "{{ lookup('vars','permissions')[app_env]['owner_group'] }}"
+    mode: "0550"
+  with_items:
+    - "{{ find_directory_result.files }}"
+  tags:
+    - deploy
+     
+- name: Copy templates
+  template:
+    src: "{{ item.path }}"
+    dest: "{{ structure.app.root }}{{ item.path | regex_replace(role_path + '/templates/' + app_name,'') | regex_replace('\\.j2$','') }}"
+    owner: "{{ lookup('vars','permissions')[app_env]['owner_user'] }}"
+    group: "{{ lookup('vars','permissions')[app_env]['owner_group'] }}"
+    mode: "0660"
+  with_items:
+    - "{{ find_template_result.files }}"
+  tags:
+    - deploy
+     
+  notify:
+    - Restart service
+
+- name: Copy other files
+  copy:
+    src: "{{ item.path }}"
+    dest: "{{ structure.app.root }}{{ item.path | regex_replace(role_path + '/templates/' + app_name,'') }}"
+    owner: "{{ lookup('vars','permissions')[app_env]['owner_user'] }}"
+    group: "{{ lookup('vars','permissions')[app_env]['owner_group'] }}"
+    mode: "0660"
+  with_items:
+    - "{{ find_other_result.files }}"
+  tags:
+    - deploy
+     
+  notify:
+    - Restart service

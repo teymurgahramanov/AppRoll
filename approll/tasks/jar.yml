@@ -1,0 +1,28 @@
+---
+
+- name: Create directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ lookup('vars','permissions')[app_env]['owner_user'] }}"
+    group: "{{ lookup('vars','permissions')[app_env]['owner_group'] }}"
+    mode: "2750"
+  with_items:
+    - "{{ structure.app.java }}"
+    - "{{ structure.log.java }}"
+  tags:
+    - deploy
+    
+- name: Download Java
+  unarchive:
+    src: "{{ lookup('vars',app_name)['state'][app_env]['java'] }}"
+    dest: "{{ structure.app.java }}"
+    owner: "{{ lookup('vars','permissions')[app_env]['owner_user'] }}"
+    group: "{{ lookup('vars','permissions')[app_env]['owner_group'] }}"
+    mode: "0750"
+    extra_opts: [--strip-components=1]
+    remote_src: yes
+  notify:
+    - Restart service
+  tags:
+    - deploy

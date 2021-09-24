@@ -1,0 +1,21 @@
+apps:
+  - foo
+  - bar
+
+envs:
+  - test
+  - preprod
+  - prod
+
+locs:
+  - miami
+  - florence
+  - barcelona
+
+acts:
+  - check
+  - start
+  - stop
+  - restart
+  - is-active
+  - get-version

@@ -1,0 +1,26 @@
+---
+
+- name: Restart service
+  service:
+    name: "{{ app_name }}"
+    state: restarted
+    daemon_reload: yes
+  notify: 
+    - Check service
+
+- name: Check service
+  service:
+    name: "{{ app_name }}"
+    state: "{{ lookup('vars',app_name)['state'][app_env]['status'] }}"
+    enabled: "{{ lookup('vars',app_name)['state'][app_env]['autostart'] }}"
+    daemon_reload: yes
+  notify:
+    - Get service facts
+    - Check service status
+
+- name: Get service facts
+  service_facts:
+
+- name: Check service status
+  debug:
+    var: ansible_facts.services['{{ app_name }}.service'].state

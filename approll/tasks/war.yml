@@ -1,0 +1,56 @@
+---
+
+- name: Create directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    recurse: yes
+    owner: "{{ lookup('vars','permissions')[app_env]['owner_user'] }}"
+    group: "{{ lookup('vars','permissions')[app_env]['owner_group'] }}"
+    mode: "2770"
+  with_items:
+    - "{{ structure.app.tomcat }}"
+    - "{{ structure.app.java }}"
+    - "{{ structure.log.tomcat }}"
+  tags:
+    - deploy
+
+- name: Download Java
+  unarchive:
+    src: "{{ lookup('vars',app_name)['state'][app_env]['java'] }}"
+    dest: "{{ structure.app.java }}"
+    owner: "{{ lookup('vars','permissions')[app_env]['owner_user'] }}"
+    group: "{{ lookup('vars','permissions')[app_env]['owner_group'] }}"
+    mode: "0770"
+    extra_opts: [--strip-components=1]
+    remote_src: yes
+  notify:
+    - Restart service
+  tags:
+    - deploy
+
+- name: Download Tomcat
+  unarchive:
+    src: "{{ lookup('vars',app_name)['state'][app_env]['tomcat'] }}"
+    dest: "{{ structure.app.tomcat }}"
+    owner: "{{ lookup('vars','permissions')[app_env]['owner_user'] }}"
+    group: "{{ lookup('vars','permissions')[app_env]['owner_group'] }}"
+    mode: "0770"
+    extra_opts: [--strip-components=1]
+    remote_src: yes
+  notify:
+    - Restart service
+  tags:
+    - deploy
+
+- name: Copy Tomcat server.xml
+  template:
+    src: "{{ lookup('vars',app_name)['type'] }}/server.xml.j2"
+    dest: "{{ structure.app.root }}/server.xml"
+    owner: "{{ lookup('vars','permissions')[app_env]['owner_user'] }}"
+    group: "{{ lookup('vars','permissions')[app_env]['owner_group'] }}"
+    mode: "0440"
+  notify:
+    - Restart service
+  tags:
+    - deploy

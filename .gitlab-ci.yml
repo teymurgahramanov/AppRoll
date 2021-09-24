@@ -1,0 +1,47 @@
+workflow:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "web"'
+
+stages:
+  - deploy
+  - test
+  - cleanup
+    
+deploy:
+  stage: deploy
+  script:
+    - echo $APPROLL_VAULT_PASSWORD > .approll-vault-password.txt
+    - for n in $APP_NAME; do
+        for c in $APP_LOC; do
+          sudo ansible-playbook approll.yml -i approll.ini --extra-vars "app_name=$n app_env=$APP_ENV app_loc=$c" --tags "deploy" --vault-password-file .approll-vault-password.txt -u roller --private-key /home/roller/.ssh/id_rsa; 
+        done
+      done
+
+test:
+  stage: test
+  script:
+    - python3 -m venv venv
+    - source venv/bin/activate
+    - pip install -q --upgrade pip
+    - pip install -q -r requirements.txt
+    - touch healthcheck.log
+    - for n in $APP_NAME; do
+        for c in $APP_LOC; do
+          if [[ "$c" == "$MAIN_SITE" ]]; then
+            python3 healthcheck.py $n $APP_ENV $c | tee -a healthcheck.log;
+          else
+            echo "Test disabled for $c";
+          fi
+        done
+      done
+    - if [[ $(cat healthcheck.log | egrep 'FAIL|WARNING' | wc -l) -gt 0 ]]; then exit 1; fi
+  when: on_success
+
+cleanup:
+  stage: cleanup
+  script:
+    - echo "Cleaning up"
+    - rm -rf .approll-vault-password.txt
+    - rm -rf healthcheck.log
+    - rm -rf "%CACHE_PATH%/%CI_PIPELINE_ID%"
+  when: always

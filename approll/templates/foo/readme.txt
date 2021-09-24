@@ -1,0 +1,1 @@
+Structure created under templates/%appname% will be created under App directory on target servers.

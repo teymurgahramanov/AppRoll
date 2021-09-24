@@ -1,0 +1,15 @@
+---
+
+permissions:
+
+  preprod:
+    owner_user: john_wick
+    owner_group: 40ronins
+
+  prod:
+    owner_user: jtravolta
+    owner_group: charlies_angels
+
+  test:
+    owner_user: summer
+    owner_group: thesmiths

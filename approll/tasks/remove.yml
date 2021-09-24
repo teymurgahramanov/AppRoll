@@ -1,0 +1,30 @@
+---
+
+- name: Stop service
+  service:
+    name: "{{ app_name }}"
+    state: stopped
+  ignore_errors: yes
+  tags:
+    - remove
+
+- name: Remove service
+  file:
+    path: "/etc/systemd/system/{{ app_name }}.service"
+    state: absent
+  tags:
+    - remove
+
+- name: Remove App directory
+  file:
+    path: "{{ structure.app.root }}"
+    state: absent
+  tags:
+    - remove
+
+- name: Reload systemd
+  service:
+    name: "{{ app_name }}"
+    daemon_reload: yes
+  tags:
+    - remove
