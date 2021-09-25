@@ -2,7 +2,7 @@
 Portable Ansible role which let control and automate lifecycle of Java Application instances in multiple sites and environments. Might be usable in "non-container" enviroments.
 
 #### ***Maybe this is not perfect solution and needed improvements, but it does its job and may inspire you to make something greater!***
-\
+ ___
 * Can be used directly with Ansible or through GitLab Pipeline.
 * Recommended to use in conjuction with [AppHook](https://github.com/teymurgahramanov/AppHook)
 * healtcheck.py used in GitLab Pipeline in 'check' stage to perform HTTP healtcheck
