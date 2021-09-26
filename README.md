@@ -1,13 +1,5 @@
 # AppRoll
-Portable Ansible role which let automate lifecycle of Java Application instances in multiple sites and environments. Just create manifest file for your application and deploy it!
-
-* Can be used directly with Ansible or through GitLab Pipeline.
-* Recommended to use in conjuction with [AppHook](https://github.com/teymurgahramanov/AppHook)
-* healtcheck.py used in GitLab Pipeline in 'check' stage to perform HTTP healtcheck
-* Developed and tested with:
-    - Ansible 2.9
-    - Python 3.6
-* If any questions, contact with me https://t.me/teymurgahramanov or subscribe to my blog https://t.me/ITBlogbyTeymur
+Portable Ansible role which let automate lifecycle of Java Application instances in multiple sites and environments. Just create manifest file for your application and deploy it! Can be used directly with Ansible or through GitLab Pipeline.
 
 ## Features:
 * Control:
@@ -55,3 +47,10 @@ Deploy, tuning, security and other server related tasks performed by Ansible.
 Control ***how*** (App version, Java runtime version, Properties and etc.) and ***where*** (Target servers, Environments and Sites) Application will run. Everything stored in GitLab and managed through Pipelines and Ansible.
 ### 3. Application instance control
 Control instance ***status*** (start,stop,restart) and perform ***healthchecks*** (systemd service or application endpoint). Here used [AppHook](https://github.com/teymurgahramanov/AppHook).
+
+* Recommended to use in conjuction with [AppHook](https://github.com/teymurgahramanov/AppHook)
+* healtcheck.py used in GitLab Pipeline in 'check' stage to perform HTTP healtcheck
+* Developed and tested with:
+    - Ansible 2.9
+    - Python 3.6
+* If any questions, contact with me https://t.me/teymurgahramanov or subscribe to my blog https://t.me/ITBlogbyTeymur
