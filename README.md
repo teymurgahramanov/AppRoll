@@ -1,5 +1,5 @@
 # AppRoll
-Portable Ansible role which let automate lifecycle of Java Application instances in multiple sites and environments. Might be usable in "non-container" enviroments.
+Portable Ansible role which let automate lifecycle of Java Application instances in multiple sites and environments.
 
 * Can be used directly with Ansible or through GitLab Pipeline.
 * Recommended to use in conjuction with [AppHook](https://github.com/teymurgahramanov/AppHook)
