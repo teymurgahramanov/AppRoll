@@ -10,12 +10,12 @@ Portable Ansible role which let automate lifecycle of Java Application instances
 * If any questions, contact with me https://t.me/teymurgahramanov or subscribe to my blog https://t.me/ITBlogbyTeymur
 
 ## Features:
-* Define in single file:
- *  App version
- *  Java runtime version
- *  Site and Env based Properties
- *  Target servers on different Environments and Sites
- *  and other parameters 
+* Control:
+    -  App version
+    -  Java runtime version
+    -  Site and Env based Properties
+    -  Target servers on different Environments and Sites
+    -  and other parameters 
 * Store and Distribute directory structure, static files, templated files for your Application 
 
 ## Requirements
