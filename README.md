@@ -53,6 +53,6 @@ Control instance ***status*** (start,stop,restart) and perform ***healthchecks**
 * Developed and tested with:
     - Ansible 2.9
     - Python 3.6
-__
+___
 https://t.me/teymurgahramanov
 https://t.me/ITBlogbyTeymur
