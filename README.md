@@ -33,7 +33,7 @@ To deploy your Java application you just need to:
 5. Run: \
 ```ansible-playbook approll.yml -i approll.ini --extra-vars "app_name=%yourappname% app_env=%yourappenv% app_loc=%yourapploc" --tags "deploy"```
 
-### Manage instance (start,stop,restart,healthcheck)
+### Manage (start,stop,restart,healthcheck)
 Use [AppHook](https://github.com/teymurgahramanov/AppHook)
 
 ### Remove
