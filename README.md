@@ -1,12 +1,12 @@
 # AppRoll
-Portable Ansible role which let automate lifecycle of Java Application instances in multiple sites and environments. Just create manifest file for your application and deploy it! Can be used directly with Ansible or through GitLab Pipeline.
+Portable Ansible role which let automate lifecycle of Java Application instances in multiple sites and environments. Just create manifest file ([example](https://github.com/teymurgahramanov/AppRoll/blob/main/approll/vars/main/foo.yml)) and assests for your application and deploy it! Can be used directly with Ansible or through GitLab Pipeline.
 
 ## Features:
 * Control:
     -  App version
     -  Java runtime version
     -  Site and Env based Properties
-    -  Target servers on different Environments and Sites
+    -  Target servers
     -  and other parameters 
 * Store and Distribute directory structure, static files, templated files for your Application 
 
@@ -53,4 +53,6 @@ Control instance ***status*** (start,stop,restart) and perform ***healthchecks**
 * Developed and tested with:
     - Ansible 2.9
     - Python 3.6
-* If any questions, contact with me https://t.me/teymurgahramanov or subscribe to my blog https://t.me/ITBlogbyTeymur
+__
+https://t.me/teymurgahramanov
+https://t.me/ITBlogbyTeymur
