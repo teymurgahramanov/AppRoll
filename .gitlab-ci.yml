@@ -5,15 +5,20 @@ workflow:
 stages:
   - deploy
   - check
-  - cleanup
-    
+  - backup
+
+notify:
+  stage: .pre
+  script: 
+    - 'curl -X POST -H "Content-type: application/json" --data "{\"text\":\"🏁 Pipeline started by ${GITLAB_USER_NAME}: ${APP_NAME} ➡️ ${APP_ENV}\"}" ${SLACK}'
+
 deploy:
   stage: deploy
   script:
     - echo $APPROLL_VAULT_PASSWORD > .approll-vault-password.txt
     - for n in $APP_NAME; do
-        for c in $APP_LOC; do
-          sudo ansible-playbook approll.yml -i approll.ini --extra-vars "app_name=$n app_env=$APP_ENV app_loc=$c" --tags "deploy" --vault-password-file .approll-vault-password.txt -u roller --private-key /home/roller/.ssh/id_rsa; 
+        for c in $MAIN_SITE; do
+          sudo ansible-playbook approll.yml -i approll.ini --extra-vars "app_name=$n app_env=$APP_ENV app_loc=$c" --tags "deploy" --vault-password-file .approll-vault-password.txt -u magnum --private-key /home/magnum/.ssh/id_rsa; 
         done
       done
 
@@ -26,18 +31,32 @@ check:
     - pip install -q -r requirements.txt
     - touch healthcheck.log
     - for n in $APP_NAME; do
-        for c in $APP_LOC; do
+        for c in $MAIN_SITE; do
+          echo "Check will be performed only on $MAIN_SITE";
           python3 healthcheck.py $n $APP_ENV $c | tee -a healthcheck.log;
         done
       done
     - if [[ $(cat healthcheck.log | egrep 'FAIL|WARNING' | wc -l) -gt 0 ]]; then exit 1; fi
   when: on_success
 
+backup:
+  stage: backup
+  script:
+    - echo $APPROLL_VAULT_PASSWORD > .approll-vault-password.txt
+    - for n in $APP_NAME; do
+        for c in $DR_SITES; do
+          sudo ansible-playbook approll.yml -i approll.ini --extra-vars "app_name=$n app_env=$APP_ENV app_loc=$c" --tags "deploy" --vault-password-file .approll-vault-password.txt -u roller --private-key /home/roller/.ssh/id_rsa; 
+        done
+      done
+  rules:
+    - if: '$APP_ENV == "prod"'
+      when: on_success
+      allow_failure: true
+
 cleanup:
-  stage: cleanup
+  stage: .post
   script:
     - echo "Cleaning up"
     - rm -rf .approll-vault-password.txt
     - rm -rf healthcheck.log
     - rm -rf "%CACHE_PATH%/%CI_PIPELINE_ID%"
-  when: always
