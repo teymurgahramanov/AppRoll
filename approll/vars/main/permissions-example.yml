@@ -1,0 +1,15 @@
+---
+
+permissions:
+
+  preprod:
+    owner_user: app
+    owner_group: appadmins
+
+  prod:
+    owner_user: app
+    owner_group: appadmins
+
+  test:
+    owner_user: app
+    owner_group: testappadmins

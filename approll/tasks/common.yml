@@ -98,7 +98,7 @@
   tags:
     - deploy
      
-- name: Create the directories
+- name: Create directory structure
   file:
     path: "{{ structure.app.root }}{{ item.path | regex_replace(role_path + '/templates/' + app_name,'') }}"
     state: directory

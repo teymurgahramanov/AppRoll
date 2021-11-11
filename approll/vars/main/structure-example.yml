@@ -1,0 +1,17 @@
+---
+
+structure:
+
+  app:
+    self: "/App"
+    root: "/App/{{ app_name }}"
+    conf: "/App/{{ app_name }}/Conf"
+    type: "/App/{{ app_name }}/{{ lookup('vars',app_name)['type'] | upper }}"
+    tomcat: "/App/{{ app_name }}/Tomcat"
+    java: "/App/{{ app_name }}/Java"
+
+  log:
+    self: "/Log"
+    app: "/Log/{{ app_name }}"
+    tomcat: "/Log/Tomcat/{{ app_name }}"
+    java: "/Log/Java/{{ app_name }}"

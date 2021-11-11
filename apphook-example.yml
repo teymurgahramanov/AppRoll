@@ -1,0 +1,22 @@
+apps:
+  - foo
+
+envs:
+  - test
+  - preprod
+  - prod
+
+locs:
+  - dublin
+  - singapore
+  - berkeley
+
+acts:
+  - check
+  - get-status
+  - get-version
+  - start
+  - stop
+  - restart
+  - deploy
+  - remove

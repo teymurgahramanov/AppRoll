@@ -1,0 +1,43 @@
+---
+
+properties:
+
+   common:
+     preprod:
+       dublin:
+         db:
+           url: jdbc:oracle:thin:@//dbexample.com:1521/DB
+           user: dbuser
+           password: dbpass
+       singapore:
+         db:
+           url: jdbc:oracle:thin:@//dbexample.com:1521/DB
+           user: dbuser
+           password: dbpass
+       berkeley:
+         db:
+           url: jdbc:oracle:thin:@//dbexample.com:1521/DB
+           user: dbuser
+           password: dbpass
+     prod:
+       dublin:
+         db:
+           url: jdbc:oracle:thin:@//dbexample.com:1521/DB
+           user: dbuser
+           password: dbpass
+       singapore:
+         db:
+           url: jdbc:oracle:thin:@//dbexample.com:1521/DB
+           user: dbuser
+           password: dbpass
+       berkeley:
+         db:
+           url: jdbc:oracle:thin:@//dbexample.com:1521/DB
+           user: dbuser
+           password: dbpass
+     test:
+       dublin:
+         db:
+           url: jdbc:oracle:thin:@//dbexample.com:1521/DB
+           user: dbuser
+           password: dbpass

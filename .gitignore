@@ -1,1 +1,10 @@
 .venv
+approll/templates/*
+approll/vars/main/*
+!approll/vars/main/foo.yml
+!approll/vars/main/*-example.yml
+!approll/templates/foo
+!approll/templates/war
+!approll/templates/jar
+INFO.md
+apphook.yml

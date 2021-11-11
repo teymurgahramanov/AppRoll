@@ -1,7 +1,7 @@
 ---
 
 - name: AppRoll
-  hosts: app
+  hosts: localhost
   any_errors_fatal: true
   gather_facts: no
 
@@ -10,7 +10,7 @@
     - name: Include 
       include_vars: "{{ item }}"
       with_items:
-        - "./approll/vars/main/{{ app_name }}.yml"
+        - "{{ playbook_dir }}/approll/vars/main/{{ app_name }}.yml"
       tags:
         - always
 
@@ -27,4 +27,4 @@
   become: yes
   gather_facts: yes
   roles:
-    - { role: './approll' }
+    - { role: "{{ playbook_dir }}/approll" }

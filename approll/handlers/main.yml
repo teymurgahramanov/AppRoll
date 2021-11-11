@@ -7,6 +7,8 @@
     daemon_reload: yes
   notify: 
     - Check service
+    - Get service facts
+    - Check service status
 
 - name: Check service
   service:
@@ -14,9 +16,6 @@
     state: "{{ lookup('vars',app_name)['state'][app_env]['status'] }}"
     enabled: "{{ lookup('vars',app_name)['state'][app_env]['autostart'] }}"
     daemon_reload: yes
-  notify:
-    - Get service facts
-    - Check service status
 
 - name: Get service facts
   service_facts:

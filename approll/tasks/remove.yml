@@ -15,16 +15,16 @@
   tags:
     - remove
 
-- name: Remove App directory
-  file:
-    path: "{{ structure.app.root }}"
-    state: absent
-  tags:
-    - remove
-
 - name: Reload systemd
   service:
     name: "{{ app_name }}"
     daemon_reload: yes
+  tags:
+    - remove
+
+- name: Remove App directory
+  file:
+    path: "{{ structure.app.root }}"
+    state: absent
   tags:
     - remove

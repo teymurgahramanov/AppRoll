@@ -45,7 +45,7 @@ backup:
     - echo $APPROLL_VAULT_PASSWORD > .approll-vault-password.txt
     - for n in $APP_NAME; do
         for c in $DR_SITES; do
-          sudo ansible-playbook approll.yml -i approll.ini --extra-vars "app_name=$n app_env=$APP_ENV app_loc=$c" --tags "deploy" --vault-password-file .approll-vault-password.txt -u roller --private-key /home/roller/.ssh/id_rsa; 
+          sudo ansible-playbook approll.yml -i approll.ini --extra-vars "app_name=$n app_env=$APP_ENV app_loc=$c" --tags "deploy" --vault-password-file .approll-vault-password.txt -u magnum --private-key /home/magnum/.ssh/id_rsa; 
         done
       done
   rules:
@@ -60,3 +60,5 @@ cleanup:
     - rm -rf .approll-vault-password.txt
     - rm -rf healthcheck.log
     - rm -rf "%CACHE_PATH%/%CI_PIPELINE_ID%"
+  rules:
+    - when: always

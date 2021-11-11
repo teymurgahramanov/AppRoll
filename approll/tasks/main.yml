@@ -15,11 +15,4 @@
   tags:
     - remove
 
-- name: Force to check service
-  command: /bin/true
-  notify:
-    - Check service
-  tags:
-    - deploy
-
 
